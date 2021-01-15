@@ -9,8 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class HomeComponent implements OnInit {
 
   registerMode = false;
-  apiUrl = 'https://localhost:5001/api/'
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   ngOnInit(): void {
   
