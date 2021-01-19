@@ -22,8 +22,9 @@
         </ul>
 
         
-          <div class="offset-md-8 dropdown" *ngIf="(currentUser$ | async) as user" dropdown>
-            <a class="dropdown-toggle text-light" dropdownToggle>
+          <div class="offset-md-6 dropdown" *ngIf="(currentUser$ | async) as user" dropdown>
+            <img src="{{user.photoUrl}}" alt="{{user.username}}">
+            <a class="dropdown-toggle text-light ml-1" dropdownToggle>
               Wellcome {{ user.username | titlecase}}</a>
             <div class="dropdown-menu mt-3" *dropdownMenu>
               <a routerLink="/edit" class="dropdown-item">Edit Profile</a>
