@@ -1,5 +1,6 @@
+import { Text } from '@angular/compiler/src/render3/r3_ast';
 import { Component, Input, Self, OnInit } from '@angular/core';
-import { ControlValueAccessor, NgControl, FormControl, AbstractControl } from '@angular/forms';
+import { FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-text-input',
@@ -8,8 +9,8 @@ import { ControlValueAccessor, NgControl, FormControl, AbstractControl } from '@
 })
 export class TextInputComponent implements OnInit {
 
-  @Input() label!:string;
-  @Input() type!: Text | string;
+  @Input() label!: string;
+  @Input() type = 'text';
   @Input() control!: FormControl;
 
   constructor() { }
@@ -17,19 +18,8 @@ export class TextInputComponent implements OnInit {
   ngOnInit(): void { }
 
   showErrors() {
-    const { dirty, touched, errors } = this.control;
-    return dirty && touched && errors;
+    const { touched, errors } = this.control;
+    return touched && errors;
   }
-
-  // constructor(@Self() public ngControl: NgControl) {
-  //   this.ngControl.valueAccessor = this;
-  //  }
-
-  // writeValue(obj: any): void {
-  //  }
-  // registerOnChange(fn: any): void {
-  // }
-  // registerOnTouched(fn: any): void {
-  // }
 
 }

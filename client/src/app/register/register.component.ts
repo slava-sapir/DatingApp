@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -9,27 +10,50 @@ import { AccountService } from '../_services/account.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  
-
 
   @Output() cancelRegister = new EventEmitter();
-  model: any = {};
+  validationErrors: string[] =[];
   registerForm!: FormGroup;
+  usernameControl!: FormControl;
+  passwordControl!: FormControl;
+  passwordConfirmControl!: FormControl;
+  dateOfBirthControl!: FormControl;
+  knownAsControl!: FormControl;
+  cityControl!: FormControl;
+  countryControl!: FormControl;
+  maxDate!: Date;
 
   constructor(private accountService: AccountService,
               private toastr: ToastrService,
-              private fb: FormBuilder) { }
+              private fb: FormBuilder, 
+              private router: Router) { }
 
   ngOnInit(): void {
     this.initializeForm();
+    this.maxDate = new Date();
+    this.maxDate.setFullYear(this.maxDate.getFullYear() - 18)
   }
 
   initializeForm() {
       this.registerForm = this.fb.group({
       username: ['', Validators.required],
+      gender: ['male'],
+      dateOfBirth: ['', Validators.required],
+      knownAs: ['', Validators.required],
+      city: ['', Validators.required],
+      country: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]],
       confirmPassword: ['', [Validators.required, this.matchValue('password')]]
     })
+     
+    this.usernameControl = this.registerForm.get('username') as FormControl;
+    this.passwordControl = this.registerForm.get('password') as FormControl;
+    this.passwordConfirmControl = this.registerForm.get('confirmPassword') as FormControl;
+    this.dateOfBirthControl = this.registerForm.get('dateOfBirth') as FormControl;
+    this.knownAsControl = this.registerForm.get('knownAs') as FormControl;
+    this.cityControl = this.registerForm.get('city') as FormControl;
+    this.countryControl = this.registerForm.get('country') as FormControl;
+  
   }
 
   matchValue(matchTo: string) : ValidatorFn{
@@ -39,12 +63,10 @@ export class RegisterComponent implements OnInit {
   }
 
   register(){
-    this.accountService.register(this.model).subscribe(response => {
-      console.log(response);
-      this.cancel();
+    this.accountService.register(this.registerForm.value).subscribe(response => {
+      this.router.navigateByUrl('/members');
     }, error => {
-      console.log(error);
-      this.toastr.error(error.error);
+       this.validationErrors = error;
     })
   }
 
